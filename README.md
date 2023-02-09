@@ -1,1 +1,2 @@
-# zabbix_partitioning
+# Tool for run partitioing MySQL
+
