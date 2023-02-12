@@ -1,0 +1,25 @@
+---
+database:
+    type: mysql
+    host: 127.0.0.1
+    user: root
+    passwd:
+    db: zabbix
+partitions:
+    #hourly:
+    #    - history_uint: 24h
+    daily:
+        - history: 90d
+        - history_uint: 90d
+        - history_str: 90d
+        - history_text: 90d
+    weekly:
+        - history_log: 1m
+    monthly:
+        - trends: 1y
+        - trends_uint: 1y
+logging: console
+#logging: syslog
+timezone: Europe/London
+premake: 5
+#replicate_sql: True
