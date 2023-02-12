@@ -12,6 +12,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type MysqlConfig struct {
+	host     string
+	user     string
+	password string
+	db       string
+}
+
 type City struct {
 	Id         int
 	Name       string
@@ -19,6 +26,10 @@ type City struct {
 }
 
 func main() {
+	test()
+}
+func test() {
+
 	cmd.Execute()
 	db, err := sql.Open("mysql", "root@tcp(zbx:3306)/testdb")
 	defer db.Close()
