@@ -13,11 +13,64 @@ import (
 )
 
 type MysqlConfig struct {
-	host     string
-	user     string
-	password string
-	db       string
+	host         string
+	port         string
+	socket       string
+	user         string
+	password     string
+	db           string
+	sql_log_bin  bool
+	wait_timeout string
 }
+
+type database struct {
+	Type     string `yaml:"type"`
+	Host     string `yaml:"host"`
+	User     string `yaml:"user"`
+	Password string `yaml:"passwd"`
+	DB       string `yaml:"db"`
+}
+
+type hourly struct {
+	history      string `yaml:"history,omitempty"`
+	history_uint string `yaml:"history_uint,omitempty"`
+	history_str  string `yaml:"history_str,omitempty"`
+	history_text string `yaml:"history_text,omitempty"`
+	history_log  string `yaml:"history_log,omitempty"`
+}
+type daily struct {
+	history      string `yaml:"history,omitempty"`
+	history_uint string `yaml:"history_uint,omitempty"`
+	history_str  string `yaml:"history_str,omitempty"`
+	history_text string `yaml:"history_text,omitempty"`
+	history_log  string `yaml:"history_log,omitempty"`
+}
+type weekly struct {
+	history      string `yaml:"history,omitempty"`
+	history_uint string `yaml:"history_uint,omitempty"`
+	history_str  string `yaml:"history_str,omitempty"`
+	history_text string `yaml:"history_text,omitempty"`
+	history_log  string `yaml:"history_log,omitempty"`
+}
+
+type monthly struct {
+	trends      string `yaml:"trends,omitempty"`
+	trends_uint string `yaml:"trends_uint,omitempty"`
+}
+
+type partitions struct {
+	hourly  hourly `yaml:"hourly,omitempty"`
+	daily   hourly `yaml:"daily,omitempty"`
+	weekly  hourly `yaml:"weekly,omitempty"`
+	monthly hourly `yaml:"monthly,omitempty"`
+}
+
+type logging struct {
+}
+
+// TODO: SSL connection
+// 			syslog
+//
 
 type City struct {
 	Id         int
@@ -26,7 +79,28 @@ type City struct {
 }
 
 func main() {
-	test()
+	// test()
+	mycnf := MysqlConfig{
+		db:       "testdb",
+		host:     "zbx",
+		user:     "root",
+		password: "",
+	}
+
+	dbstring := mycnf.user + "@tcp(" + mycnf.host + ":3306)/" + mycnf.db
+	db, err := sql.Open("mysql", dbstring)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	var version string
+	err = db.QueryRow("SELECT VERSION()").Scan(&version)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("MySQL version is:", version)
+
 }
 func test() {
 
